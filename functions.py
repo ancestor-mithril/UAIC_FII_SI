@@ -48,6 +48,16 @@ def get_decoded_string(cipher, string: bytes) -> str:
     return cipher.decrypt(base64.b64decode(string)).decode('utf-8').rstrip(PADDING_CHAR)
 
 
+def string_xor(s1: str, s2: str) -> str:
+    """
+
+    :param s1: string one
+    :param s2: string 2
+    :return: xor of the 2 strings
+    """
+    return ''.join(chr(ord(a) ^ ord(b)) for a, b in zip(s1, s2))
+
+
 def split_string_into_chunks(input_string: str, chunk_size: int) -> list:
     """
 
@@ -103,9 +113,16 @@ def encrypt_message(message: str, key: str, operation_mode: str = None, iv: str 
     """
     if operation_mode is not None and operation_mode != "ECB" and operation_mode != "OFB":
         raise TypeError("Operation mode must be ECB or OFB")
-    if operation_mode == "OFB" and iv is None:
-        raise ValueError("iv must be initialized for OFB")
     cipher = AES.new(key.encode())
     chunks = split_string_into_chunks(message, BLOCK_SIZE)
-    encoded_string = "".join([get_encoded_string(cipher, chunk).decode('utf-8') for chunk in chunks])
+    if operation_mode == "OFB":
+        if iv is None:
+            raise ValueError("iv must be initialized for OFB")
+        for chunk in chunks:
+
+    else:
+        encoded_string = "".join([get_encoded_string(cipher, chunk).decode('utf-8') for chunk in chunks])
     return encoded_string
+
+
+

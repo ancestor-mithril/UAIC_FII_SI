@@ -47,7 +47,9 @@ print(type(secret_key))
 a = b'LkZDybReN8OCMLz88Q8UXRS9AostHBWQop97STkeRuTW'
 
 cipher = AES.new(secret_key)
-
+initialization_vector = "\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x01\x02\x03\x04" \
+                        "\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f\x0e\x0f"
+print(len(initialization_vector))
 encoded = get_encoded_string(cipher, 'dadadadadadadada')
 print(encoded)
 
