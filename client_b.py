@@ -2,6 +2,7 @@
 # https://docs.python.org/3/library/socketserver.html#socketserver-tcpserver-example
 
 
+from time import sleep
 import socket
 import sys
 import socketserver
@@ -102,7 +103,7 @@ if __name__ == "__main__":
     (HOST, PORT), key_3, iv = init("B")
 
     wait_for_communication_request(HOST, PORT)
-
+    sleep(1)
     decrypted_key = prepare_communication()
 
     wait_for_communication_request(HOST, PORT)

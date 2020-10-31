@@ -105,7 +105,8 @@ def encrypt_message(message: str, key: str, operation_mode: str = None, iv: str 
         raise TypeError("Operation mode must be ECB or OFB")
     if operation_mode == "OFB" and iv is None:
         raise ValueError("iv must be initialized for OFB")
-    cipher = AES.new(key.encode())
+    print('len key', len(key))
+    cipher = AES.new(key.encode('utf-8'))
     chunks = split_string_into_chunks(message, BLOCK_SIZE)
     encoded_string = "".join([get_encoded_string(cipher, chunk).decode('utf-8') for chunk in chunks])
     return encoded_string
