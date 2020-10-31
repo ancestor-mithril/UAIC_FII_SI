@@ -1,13 +1,14 @@
 import socket
 from init import get_host_and_port
 from Crypto.Cipher import AES
+import Crypto
 import base64
 
 
 DECRYPT_SIZE = 44
 BLOCK_SIZE = 32
 
-PADDING_CHAR = " "
+PADDING_CHAR = "|"
 
 
 def pad(s: str) -> str:
@@ -30,6 +31,12 @@ def get_encoded_string(cipher, string: str) -> bytes:
     :param string:
     :return: encoded padded string using cipher
     """
+    print("String to be encoded:", string)
+    print("String to be encoded:", pad(string))
+    print("String to be encoded:", pad(string).encode())
+    print("String to be encoded:", pad(string).encode())
+    print("String to be encoded:", cipher.encrypt(pad(string).encode()))
+    print("String to be encoded:", base64.b64encode(cipher.encrypt(pad(string).encode())))
     return base64.b64encode(cipher.encrypt(pad(string).encode()))
 
 
@@ -40,7 +47,7 @@ def get_decoded_string(cipher, string: bytes) -> str:
     :param string: encrypted string
     :return: decrypted and unpadded string using cipher
     """
-    print("String to be encoded:", string)
+    print("String to be decoded:", string)
     print("Result 1:", base64.b64decode(string))
     print("Result 2:", cipher.decrypt(base64.b64decode(string)))
     print("Result 3:", cipher.decrypt(base64.b64decode(string)).decode('utf-8'))
@@ -94,11 +101,20 @@ def decrypt_message(encrypted_message: str, key: str, operation_mode: str = None
     """
     if operation_mode is not None and operation_mode != "ECB" and operation_mode != "OFB":
         raise TypeError("Operation mode must be ECB or OFB")
-    if operation_mode == "OFB" and iv is None:
-        raise ValueError("iv must be initialized for OFB")
+    key = pad(key)
     cipher = AES.new(key.encode())
     chunks = split_string_into_chunks(encrypted_message, DECRYPT_SIZE)
-    decoded_string = "".join([get_decoded_string(cipher, chunk.encode()) for chunk in chunks])
+    print(chunks)
+    if operation_mode == "OFB":
+        if iv is None:
+            raise ValueError("iv must be initialized for OFB")
+        decoded_string = ""
+        for chunk in chunks:
+            iv = get_encoded_string(cipher, iv).decode('utf-8')[0:32]
+            # decoded_string += Crypto.Util.strxor.strxor(iv, chunk)
+            decoded_string += string_xor(iv, chunk)
+    else:
+        decoded_string = "".join([get_decoded_string(cipher, chunk.encode()) for chunk in chunks])
     return decoded_string
 
 
@@ -113,13 +129,21 @@ def encrypt_message(message: str, key: str, operation_mode: str = None, iv: str 
     """
     if operation_mode is not None and operation_mode != "ECB" and operation_mode != "OFB":
         raise TypeError("Operation mode must be ECB or OFB")
+    # TODO: de padat cheia pentru ca in linux cheia de 16 e de 17
+    key = pad(key)
     cipher = AES.new(key.encode())
+    if operation_mode == "OFB" and iv is None:
+        raise ValueError("iv must be initialized for OFB")
     chunks = split_string_into_chunks(message, BLOCK_SIZE)
+    print(chunks)
     if operation_mode == "OFB":
+        encoded_string = ""
         if iv is None:
             raise ValueError("iv must be initialized for OFB")
         for chunk in chunks:
-
+            iv = get_encoded_string(cipher, iv).decode('utf-8')[0:32]
+            # encoded_string += Crypto.Util.strxor.strxor(iv, chunk)
+            encoded_string += string_xor(iv, chunk)
     else:
         encoded_string = "".join([get_encoded_string(cipher, chunk).decode('utf-8') for chunk in chunks])
     return encoded_string

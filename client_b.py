@@ -2,6 +2,7 @@
 # https://docs.python.org/3/library/socketserver.html#socketserver-tcpserver-example
 
 
+from time import sleep
 import socket
 import sys
 import socketserver
@@ -87,7 +88,7 @@ def prepare_communication():
     print("[B ]: Requesting key from KM. Answer received:")
     encrypted_key = send_message_request("KM", operation_mode)
     print("[KM]: Encrypted: ", encrypted_key, '\n')
-    decrypted_key = decrypt_message(encrypted_key, key_3)
+    decrypted_key = decrypt_message(encrypted_key, key_3, operation_mode="ECB")
     print("[KM]: Decrypted: ", decrypted_key, '\n')
 
     print("[B ]: Notifying Node A to start transmitting")
@@ -102,7 +103,7 @@ if __name__ == "__main__":
     (HOST, PORT), key_3, iv = init("B")
 
     wait_for_communication_request(HOST, PORT)
-
+    sleep(1)
     decrypted_key = prepare_communication()
 
     wait_for_communication_request(HOST, PORT)

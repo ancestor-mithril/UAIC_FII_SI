@@ -1,6 +1,7 @@
 # https://docs.python.org/3/library/socketserver.html#socketserver-tcpserver-example
 
 
+from time import sleep
 import socket
 import sys
 import socketserver
@@ -77,7 +78,7 @@ def prepare_communication() -> str:
     print("[A ]: Requesting key from KM. Answer received:")
     encrypted_key = send_message_request("KM", sys.argv[1])
     print("[KM]: Encrypted: ", encrypted_key, '\n')
-    decrypted_key = decrypt_message(encrypted_key, key_3)
+    decrypted_key = decrypt_message(encrypted_key, key_3, operation_mode="ECB")
     print("[KM]: Decrypted: ", decrypted_key, '\n')
 
     return decrypted_key
