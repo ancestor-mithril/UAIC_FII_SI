@@ -4,7 +4,7 @@ Trei scripturi in python care comunica intre ele prin `UDP` pentru a trimite un 
 
 ## Testarea pe o masina virtuala de Linux online, oferita de [Repl.it](https://repl.it/) 
  * **RECOMANDAT**
- * codul este putin modificat, acestea fiind necesare pentru a rula cele 3 noduri in procese diferite intrucat masina virtuala nu pune la dispozitie mai multe console pentru a rula separat cele 3 noduri; functionalitatile principale raman aceleasi
+ * codul a suferit putine modificari, acestea fiind necesare pentru a rula cele 3 noduri in procese diferite intrucat masina virtuala nu pune la dispozitie mai multe console pentru a rula separat cele 3 noduri; functionalitatile principale raman aceleasi
  * Pagina de testare: [aici](https://uaicfiisi.ancestormithril.repl.run/)
    * pe pagina de mai sus poate fi urmarita executia algoritmului dupa terminarea instalarii dependintelor
  * Pentru vizualizarea codului si executii personalizate, se acceseaza urmatorul [link](https://repl.it/@ancestormithril/UAICFIISI#Tema_1/main.py)
