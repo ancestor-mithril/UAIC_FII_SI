@@ -7,26 +7,28 @@ Trei scripturi in python care comunica intre ele prin UDP pentru a trimite un me
   * Conditii necesare:
     * Windows sau o arhitectura de Linux pe 64 de biti
     * Un environment de python3.6.9 sau orice versiune ulterioara
-    * Existenta in environmentul de python curent a bibliotecilor `pycrypto` sau `pycryptodome`
+    * Existenta in environmentul de python curent a bibliotecilor `pycrypto` si inexistenta bibliotecii `pycryptodome`
   * In cazul in care nu sunt satisfacute conditiile anterioare
     * Se descarca [lubuntu Alternate 64-bit](http://cdimage.ubuntu.com/lubuntu/releases/18.04/release/lubuntu-18.04-alternate-amd64.iso)
     * Dupa instalarea si pornirea masinii virtuale de la linkul de mai sus, se face actualizarea systemului
     * Se verifica daca exista python3.6.9 sau orice versiune ulterioara (testarea personala a confirmat ca este fara a fi nevoie de o actiune ulterioara)
-    * Se verifica existenta pachetelor de python `pycrypto` sau `pycryptodome` prin deschiderea unui terminal cu environmentul curent de python si rularea
+    * Se verifica existenta pachetelor de python `pycrypto` si inexistenta bibliotecii `pycryptodome` prin deschiderea unui terminal cu environmentul curent de python si rularea
       ```
       python3
       >>>from Crypto.Cipher import AES
       ```
-    * In caz de eroare se instaleaza bibliotecile `pycrypto` sau `pycryptodome` prin urmatoarele comenzi:
+      * pe masina virtuala de mai sus, `pycrypto` exista default la probare
+    * In caz de eroare se instaleaza bibliotecile prin urmatoarele comenzi:
       ```
-      pip install <your-library-here>
+      pip uninstall pycryptodome
+      pip install pycrypto
       ```
-      * sau
+      * sau daca nu exista `pip`
       ```
       sudo apt-get install build-essential python3-dev
-      pip install <your-library-here>
+      pip uninstall pycryptodome
+      pip install pycrypto
       ```
-      * unde `<your-library-here>` trebuie inlocuit cu `pycrypto` sau `pycryptodome`
 
 ## Rulare
 In directorul curent, urmatoarea ordine:
