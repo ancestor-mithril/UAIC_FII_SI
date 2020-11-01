@@ -103,17 +103,18 @@ def decrypt_message(encrypted_message: str, key: str, operation_mode: str = None
         raise TypeError("Operation mode must be ECB or OFB")
     key = pad(key)
     cipher = AES.new(key.encode())
-    chunks = split_string_into_chunks(encrypted_message, DECRYPT_SIZE)
-    print(chunks)
     if operation_mode == "OFB":
+        chunks = split_string_into_chunks(encrypted_message, BLOCK_SIZE)
         if iv is None:
             raise ValueError("iv must be initialized for OFB")
+        iv = pad(iv)
         decoded_string = ""
         for chunk in chunks:
             iv = get_encoded_string(cipher, iv).decode('utf-8')[0:32]
             # decoded_string += Crypto.Util.strxor.strxor(iv, chunk)
             decoded_string += string_xor(iv, chunk)
     else:
+        chunks = split_string_into_chunks(encrypted_message, DECRYPT_SIZE)
         decoded_string = "".join([get_decoded_string(cipher, chunk.encode()) for chunk in chunks])
     return decoded_string
 
@@ -140,6 +141,7 @@ def encrypt_message(message: str, key: str, operation_mode: str = None, iv: str 
         encoded_string = ""
         if iv is None:
             raise ValueError("iv must be initialized for OFB")
+        iv = pad(iv)
         for chunk in chunks:
             iv = get_encoded_string(cipher, iv).decode('utf-8')[0:32]
             # encoded_string += Crypto.Util.strxor.strxor(iv, chunk)
