@@ -43,7 +43,7 @@ Trei scripturi in python care comunica intre ele prin `UDP` pentru a trimite un 
       ```
 
 ## Rulare
-In directorul curent, urmatoarea ordine:
+In directorul curent, in urmatoarea ordine:
   * terminalul 1:
     ```
     <your-path-to-python> server_km.py
