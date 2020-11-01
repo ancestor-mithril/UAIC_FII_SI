@@ -19,7 +19,7 @@ Trei scripturi in python care comunica intre ele prin `UDP` pentru a trimite un 
   * Conditii necesare:
     * Windows sau o arhitectura de Linux pe 64 de biti
     * Un environment de python3.6.9 sau orice versiune ulterioara
-    * Existenta in environmentul de python curent a bibliotecilor `pycrypto` si inexistenta bibliotecii `pycryptodome`
+    * Existenta in environmentul de python curent a bibliotecii `pycrypto` si inexistenta bibliotecii `pycryptodome`
   * In cazul in care nu sunt satisfacute conditiile anterioare
     * Se descarca [lubuntu Alternate 64-bit](http://cdimage.ubuntu.com/lubuntu/releases/18.04/release/lubuntu-18.04-alternate-amd64.iso)
     * Dupa instalarea si pornirea masinii virtuale de la linkul de mai sus, se face actualizarea systemului
