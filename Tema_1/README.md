@@ -1,9 +1,21 @@
 # Tema 1 Securitatea Informatiei
 
-Trei scripturi in python care comunica intre ele prin UDP pentru a trimite un mesaj criptat prin ECB sau OFB de la un nod la celalalt.
+Trei scripturi in python care comunica intre ele prin `UDP` pentru a trimite un mesaj criptat prin ECB sau OFB de la un nod la celalalt. A fost folosit `UDP` si nu `TCP` intrucat pentru functionalitati similare de scala redusa care sunt rulate pe aceeasi masina nu ar trebuii sa existe o diferenta.
+
+## Testarea pe o masina virtuala de Linux online, oferita de [Repl.it](https://repl.it/) 
+ * **RECOMANDAT**
+ * codul este putin modificat, acestea fiind necesare pentru a rula cele 3 noduri in procese diferite intrucat masina virtuala nu pune la dispozitie mai multe console pentru a rula separat cele 3 noduri; functionalitatile principale raman aceleasi
+ * Pagina de testare: [aici](https://uaicfiisi.ancestormithril.repl.run/)
+   * pe pagina de mai sus poate fi urmarita executia algoritmului dupa terminarea instalarii dependintelor
+ * Pentru vizualizarea codului si executii personalizate, se acceseaza urmatorul [link](https://repl.it/@ancestormithril/UAICFIISI#Tema_1/main.py)
+   * se poate rula apsand `Run` sau: 
+     * instalarea din `packages` a modulului `pycrypto` si rularea
+     * `python Tema_1/main.py`
+   * nu pot fi introdusi parametrii de la linia de comanda dar poate fi deschis fisierul `Tema_1/main.py` si la linia `12` poate fi modificat modul de operare din `OFB` in `ECB`, in fisierul `text.txt` poate fi modificat textul ce va fi transmis iar in `keys.txt` pot fi modificate cheile de criptare
+   * doar pentru prima rulare se configureaza masina virtuala si este instalata biblioteca necesara automat odata cu apasarea butonului `Run`, iar apoi in aceeasi sesiune de lucru pot fi rulate teste multiple
 
 
-## Pregatirea mediului de lucru
+## Pregatirea mediului de lucru local
   * Conditii necesare:
     * Windows sau o arhitectura de Linux pe 64 de biti
     * Un environment de python3.6.9 sau orice versiune ulterioara
@@ -37,7 +49,7 @@ In directorul curent, urmatoarea ordine:
     <your-path-to-python> server_km.py
     ```
     * va porni serverul `KeyManager`, server UDP, care poate fi lasat pornit pe tot parcursul testarii comunicarii intre A si B
-    * `KM` va asculta in permanenta pentru mesaje de tipul `ECB` sau `OFB` si de fiecare data va trimite inapoi `cheia 1` sau `cheia 2` incriptata cu `cheia 3` 
+    * `KM` va asculta in permanenta pentru mesaje de tipul `ECB` sau `OFB` si de fiecare data va trimite inapoi `cheia 1` sau `cheia 2` criptata cu `cheia 3` 
     * Pentru oprire se foloseste `KeyboardInterrupt`
   * terminalul 2:
     ```
@@ -49,7 +61,7 @@ In directorul curent, urmatoarea ordine:
     <your-path-to-python> client_a.py <operation-mode> <file-to-be-sent>
     ```
     * `<operation-mode>` poate fi doar `ECB` sau `OFB`
-    * `<file-to-be-sent>` este un fisier text cu mesajul care se vrea incriptat
+    * `<file-to-be-sent>` este un fisier text cu mesajul care se vrea criptat
     * exemplu:
     ```
     <your-path-to-python> client_a.py ECB text.txt
@@ -64,9 +76,34 @@ In directorul curent, urmatoarea ordine:
 
 ## Explicatii suplimentare
 
+### Modulul `init`
+Este un modul de initializare, comun celor 3 noduri. Ofera o metoda de recuperare a vectorului de initializare `iv` si o metoda de aflare a datelor necesare pentru conectarea la un nod oferit ca parametru, adica `HOST` si `PORT`
+
+### Modulul `functions`
+Modul comun celor 3 noduri. Contine metode utile precum:
+ * `pad` -> primeste un sir si il intoarce padat
+ * `get_encoded_string` -> primeste un sir clar si un cifru si intoarce sirul initial criptat cu cifrul respectiv
+ * `get_decoded_string` -> primeste un sir criptat si un cifru, intoarce sirul in clar decriptat cu cifrul respectiv
+ * `string_xor` -> primeste doua siruri si intoarce operatia de xor asupra celor 2 siruri
+ * `split_string_into_chunks` -> primeste un sir si o dismensiune si intoarce sirul initial impartit in bucati de dimensiunea ceruta
+ * `send_message_request` -> primeste numele unui nod si un mesaj si incearca sa trimita mesajul la nodul respectiv folosind protocolul `UDP`
+ * `encrypt_message` -> primeste un mesaj, o cheie, un mod de operare si un vector de initializare; aplica OFB sau ECB pe mesaj folosind cheia si eventual vectorul de initializare; la `ECB` imparte mesajul in bucati si le cripteaza pe fiecare cu cheia data; la `OFB` imparte mesajul in bucati, cripteaz vectorul de initializare pentru fiecare bucata si face `xor` intre fiecare rezultat al criptarii si bucata de mesaj
+ * `decrypt_message` -> la fel ca `encrypt_message`, numai ca invers
+
 ### Nodul `KM`
+Este un server `UDP` pe mai multe fire de executie, ruleaza in permanenta pana la primirea de pe `stdin` a unui mesaj oarecare.
+
+Asculta mesaje si daca mesajul primit este `ECB` sau `OFB`, citeste din fisiere `key_1` si `key_2`, le cripteaza cu `key_3` si `ECB` (cheile sunt un bloc unitar, de maxim 32 de caractere) si le trimite inapoi.
 
 ### Nodul `A`
 
+Primeste de la linia de comanda modul de operare si fisierul unde se afla mesajul care trebuie timis la `B`. Il anunta pe `B` de iminenta unei comunicari si de modul de operare, pentru a face pregatirile de cuviinta.
+
+Obtine datele necesare pentru criptare prin trimiterea unui mesaj la serverul `UDP` `KM`, de la care primeste o cheie criptata cu `key_3`, comuna celor 3 noduri. 
+
+Asteapta sub forma de server `UDP` mesajul in care `B` confirma ca e pregatit pentru comunicare. Intrerupe modul de server si ii trimite un mesaj `UDP` lui B.
+
 ### Nodul `B`
+
+Este pornit ca server `UDP` care asteapta modul de operare de la `A`. La primirea mesajului, iese din modul server si cere de la `KM` cheia corespunzatoare. Dupa ce primeste si decripteaza cheia, il anunta pe `A` ca poate sa inceapa trimiterea mesajului. Imediat dupa, intra in modul de server `UDP`.
 
