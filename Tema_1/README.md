@@ -8,7 +8,7 @@ Trei scripturi in python care comunica intre ele prin `UDP` pentru a trimite un 
  * Pagina de testare: [aici](https://uaicfiisi.ancestormithril.repl.run/)
    * pe pagina de mai sus poate fi urmarita executia algoritmului dupa terminarea instalarii dependintelor
  * Pentru vizualizarea codului si executii personalizate, se acceseaza urmatorul [link](https://repl.it/@ancestormithril/UAICFIISI#Tema_1/main.py)
-   * se poate rula apsand `Run` sau: 
+   * se poate rula apasand `Run` sau: 
      * instalarea din `packages` a modulului `pycrypto` si rularea
      * `python Tema_1/main.py`
    * nu pot fi introdusi parametrii de la linia de comanda dar poate fi deschis fisierul `Tema_1/main.py` si la linia `12` poate fi modificat modul de operare din `OFB` in `ECB`, in fisierul `text.txt` poate fi modificat textul ce va fi transmis iar in `keys.txt` pot fi modificate cheile de criptare
