@@ -107,3 +107,10 @@ Asteapta sub forma de server `UDP` mesajul in care `B` confirma ca e pregatit pe
 
 Este pornit ca server `UDP` care asteapta modul de operare de la `A`. La primirea mesajului, iese din modul server si cere de la `KM` cheia corespunzatoare. Dupa ce primeste si decripteaza cheia, il anunta pe `A` ca poate sa inceapa trimiterea mesajului. Imediat dupa, intra in modul de server `UDP`.
 
+## Testare
+
+Au fost efectuate teste pentru modul `ECB` si `OFB`.
+
+Cheile testate au avut lungime de pana in `16` caractere (`cheia de test 1`, `cheia de test 2`, `cheia de test 3`) si variatii ale acestora. Ele pot fi testate si modificate in fiserul `keys.txt` si `key_3.txt`. Cheile de peste 16 caractere pot sa functioneze corect, dar implementarea curenta nu a avut intentia sa ia in calcul aceste cazuri.
+
+Textele trimise au fost atat mai mici de 32 de caractere cat si mai mari de 32 de caractere, si la fiecare mod, `ECB` sau `OFB` textul a fost receptionat in mod corespunzator de catre nodul `B`. Erorile aparute au avut loc doar atunci cand au fost introduse caractere UTF-8 in textul din `text.txt`, erori aparute din cauza encoding-ului diferit. Lungimea maxima testata a fost `329` de caractere, care este textul curent din `text.txt`.
