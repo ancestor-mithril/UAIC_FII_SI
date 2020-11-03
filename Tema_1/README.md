@@ -109,7 +109,7 @@ Este pornit ca server `UDP` care asteapta modul de operare de la `A`. La primire
 
 ## Testare
 
-Au fost efectuate teste pentru modul `ECB` si `OFB`.
+Au fost efectuate teste pentru modul `ECB` si `OFB`. Au fost efectuate teste pentru modul `ECB` si `OFB`. Se poate testa pe [Repl](https://repl.it/@ancestormithril/UAICFIISI#Tema_1/main.py) modificarea in timp real al modului de testare, `ECB` sau `OFB`.
 
 Cheile testate au avut lungime de pana in `16` caractere (`cheia de test 1`, `cheia de test 2`, `cheia de test 3`) si variatii ale acestora. Ele pot fi testate si modificate in fiserul `keys.txt` si `key_3.txt`. Cheile de peste 16 caractere pot sa functioneze corect, dar implementarea curenta nu a avut intentia sa ia in calcul aceste cazuri.
 
